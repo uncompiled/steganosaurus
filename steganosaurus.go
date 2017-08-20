@@ -1,9 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"github.com/uncompiled/steganosaurus/modules"
 	"gopkg.in/urfave/cli.v1"
-	"os"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 		{
 			Name:    "whitespace",
 			Aliases: []string{"ws"},
-			Usage:   "Tools for whitespace steganography",
+			Usage:   "Tools for the whitespace programming language",
 			Subcommands: []cli.Command{
 				{
 					Name:  "merge",
@@ -26,6 +27,29 @@ func main() {
 						filename2 := c.Args().Get(1)
 
 						modules.WhitespaceMerge(filename1, filename2, os.Stdout)
+						return nil
+					},
+				},
+			},
+		},
+		{
+			Name:    "zero-width",
+			Aliases: []string{"zw"},
+			Usage:   "Zero-width codepoint steganography",
+			Subcommands: []cli.Command{
+				{
+					Name:  "encode",
+					Usage: "Encodes plaintext as zero-width codepoints from input stream",
+					Action: func(c *cli.Context) error {
+						modules.ZeroWidthEncode(os.Stdin, os.Stdout)
+						return nil
+					},
+				},
+				{
+					Name:  "decode",
+					Usage: "Decodes hidden zero-width codepoints from input stream",
+					Action: func(c *cli.Context) error {
+						modules.ZeroWidthDecode(os.Stdin, os.Stdout)
 						return nil
 					},
 				},
