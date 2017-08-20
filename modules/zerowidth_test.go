@@ -1,0 +1,79 @@
+package modules
+
+import "testing"
+
+// TestStringToBin tests whether strings are correctly converted to binary.
+func TestStringToBin(t *testing.T) {
+	testStrings := [3]string{
+		"abcdefghijklmnopqrstuvxyz",
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		"1234567890!@#$%^&*),./?",
+	}
+
+	expectedStrings := [3]string{
+		"01100001011000100110001101100100011001010110011001100111011010000110100101101010011010110110110001101101011011100110111101110000011100010111001001110011011101000111010101110110011110000111100101111010",
+		"0100000101000010010000110100010001000101010001100100011101001000010010010100101001001011010011000100110101001110010011110101000001010001010100100101001101010100010101010101011001010111010110000101100101011010",
+		"0011000100110010001100110011010000110101001101100011011100111000001110010011000000100001010000000010001100100100001001010101111000100110001010100010100100101100001011100010111100111111",
+	}
+
+	for i, input := range testStrings {
+		output := stringToBin(input)
+		if output != expectedStrings[i] {
+			t.Fail()
+		}
+	}
+}
+
+// TestBinToString tests whether a binary string can be converted back into unicode
+func TestBinToString(t *testing.T) {
+	testStrings := [3]string{
+		"01100001011000100110001101100100011001010110011001100111011010000110100101101010011010110110110001101101011011100110111101110000011100010111001001110011011101000111010101110110011110000111100101111010",
+		"0100000101000010010000110100010001000101010001100100011101001000010010010100101001001011010011000100110101001110010011110101000001010001010100100101001101010100010101010101011001010111010110000101100101011010",
+		"0011000100110010001100110011010000110101001101100011011100111000001110010011000000100001010000000010001100100100001001010101111000100110001010100010100100101100001011100010111100111111",
+	}
+
+	expectedStrings := [3]string{
+		"abcdefghijklmnopqrstuvxyz",
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+		"1234567890!@#$%^&*),./?",
+	}
+
+	for i, input := range testStrings {
+		output := binToString(input)
+		if output != expectedStrings[i] {
+			t.Fail()
+		}
+	}
+}
+
+// TestEncode tests whether binary can be encoded into zero-width codepoints
+func TestEncode(t *testing.T) {
+	if hiddenOne == hiddenZero {
+		// This would be a huge problem.
+		t.Fail()
+	}
+
+	if encode("0") != hiddenZero {
+		t.Fail()
+	}
+
+	if encode("1") != hiddenOne {
+		t.Fail()
+	}
+}
+
+// TestDecode tests whether zero-width codepoints can be converted back into binary
+func TestDecode(t *testing.T) {
+	if hiddenOne == hiddenZero {
+		// This would be a huge problem.
+		t.Fail()
+	}
+
+	if decode(hiddenZero) != "0" {
+		t.Fail()
+	}
+
+	if decode(hiddenOne) != "1" {
+		t.Fail()
+	}
+}
